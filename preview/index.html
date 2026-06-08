@@ -1,0 +1,2479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amendments Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #eef1f3;
+      --panel: #ffffff;
+      --panel-strong: #ffffff;
+      --line: #d4dce1;
+      --text: #333333;
+      --muted: #6b7075;
+      --accent: #5ea63a;
+      --accent-strong: #4e9630;
+      --accent-soft: rgba(94, 166, 58, 0.14);
+      --navy: #236b8b;
+      --navy-strong: #155875;
+      --warn: #f4a21d;
+      --decline: #c45a46;
+      --shadow: 0 10px 24px rgba(30, 44, 58, 0.08);
+      --radius-xl: 14px;
+      --radius-lg: 10px;
+      --radius-md: 6px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Manrope", sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, #eff2f4 0%, #e8edf0 100%);
+      min-height: 100vh;
+    }
+
+    .shell {
+      width: 100%;
+      margin: 24px auto 48px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero {
+      background: #ffffff;
+      border: 1px solid #dbe2e7;
+      border-radius: 0;
+      padding: 22px 26px 18px;
+      box-shadow: none;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 0;
+      background: transparent;
+      color: #d2df3d;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 25px;
+      line-height: 1;
+      max-width: 850px;
+      color: var(--accent);
+      font-weight: 800;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 760px;
+      font-size: 0.98rem;
+      line-height: 1.45;
+      color: var(--muted);
+    }
+
+    .app {
+      margin-top: 0;
+      background: #ffffff;
+      border: 1px solid #dbe2e7;
+      border-top: 0;
+      border-radius: 0;
+      box-shadow: none;
+      overflow: hidden;
+    }
+
+    .topbar {
+      padding: 18px 22px 14px;
+      border-bottom: 1px solid rgba(94, 77, 57, 0.08);
+      background: rgba(255, 255, 255, 0.58);
+    }
+
+    .topbar-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .program-title {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .program-title strong {
+      font-size: 1.25rem;
+    }
+
+    .program-title span {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .status-badge {
+      padding: 9px 13px;
+      border-radius: 999px;
+      background: rgba(31, 122, 90, 0.12);
+      color: var(--accent-strong);
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding-top: 16px;
+    }
+
+    .tab {
+      border: 0;
+      background: transparent;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+      transition: 180ms ease;
+    }
+
+    .tab.active {
+      background: white;
+      color: var(--text);
+      box-shadow: inset 0 0 0 1px rgba(94, 77, 57, 0.08);
+    }
+
+    .content {
+      padding: 22px;
+    }
+
+    .panel {
+      display: none;
+      animation: fadeUp 220ms ease;
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .section-head h3 {
+      margin: 0 0 8px;
+      font-size: 1.4rem;
+      color: var(--accent);
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 720px;
+      line-height: 1.5;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button, .button {
+      font: inherit;
+      border: 0;
+      cursor: pointer;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 4px;
+      font-weight: 800;
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+    }
+
+    .button.primary {
+      color: white;
+      background: #3496c8;
+      box-shadow: inset 0 0 0 1px #2a84b1;
+    }
+
+    .button.success {
+      color: white;
+      background: #4e9630;
+      box-shadow: inset 0 0 0 1px #3f7f26;
+    }
+
+    .button.secondary {
+      color: var(--text);
+      background: white;
+      box-shadow: inset 0 0 0 2px var(--navy);
+    }
+
+    .button.ghost {
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.72);
+      box-shadow: inset 0 0 0 1px rgba(94, 77, 57, 0.08);
+    }
+
+    .button.small {
+      padding: 10px 12px;
+      font-size: 13px;
+      border-radius: 12px;
+    }
+
+    .icon-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: nowrap;
+      margin-top: 0;
+    }
+
+    .icon-button {
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: none;
+    }
+
+    .icon-button svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .requested-input {
+      width: 100%;
+      padding: 11px 12px;
+      text-align: left;
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .requested-display {
+      width: 100%;
+      min-height: 45px;
+      padding: 11px 12px;
+      border: 1px solid #cfd8de;
+      border-radius: 2px;
+      background: #ffffff;
+      color: var(--text);
+      font: inherit;
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+      display: flex;
+      align-items: center;
+    }
+
+    .log-list {
+      margin: 16px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 10px;
+    }
+
+    .log-item {
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(94, 77, 57, 0.08);
+      color: var(--muted);
+      line-height: 1.35;
+      font-size: 12px;
+    }
+
+    .log-item strong {
+      color: var(--text);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .message-panel {
+      margin-top: 18px;
+      padding: 16px;
+      border: 1px solid #cfe0e8;
+      background: #f6fbfe;
+    }
+
+    .message-panel h5 {
+      margin: 0 0 6px;
+      color: var(--navy-strong);
+      font-size: 15px;
+    }
+
+    .message-panel p {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .submit-token {
+      display: none;
+      margin-top: 10px;
+      padding: 8px 10px;
+      background: #eef5ef;
+      border: 1px solid #d6e8d4;
+      color: #245d47;
+      font-size: 12px;
+      font-weight: 700;
+      width: fit-content;
+    }
+
+    .submit-token.visible {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .button.decline {
+      color: white;
+      background: #b55443;
+    }
+
+    .button.revision {
+      color: white;
+      background: #cd7d24;
+    }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .grid.two {
+      grid-template-columns: 1.2fr 0.8fr;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid #dbe2e7;
+      border-radius: 0;
+      padding: 18px;
+      overflow-x: auto;
+    }
+
+    .card h4 {
+      margin: 0 0 6px;
+      font-size: 1.05rem;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .stat {
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(94, 77, 57, 0.08);
+      border-radius: 18px;
+      padding: 14px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.6rem;
+      margin-top: 6px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 12px 10px;
+      text-align: left;
+      border-bottom: 1px solid #e3e8ec;
+      vertical-align: top;
+      font-size: 13px;
+    }
+
+    th {
+      color: #ffffff;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: #216b8b;
+      font-weight: 800;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .number {
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+    }
+
+    .delta-pos {
+      color: var(--accent-strong);
+    }
+
+    .delta-neg {
+      color: var(--decline);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .tag.pending {
+      background: #f2eadc;
+      color: #9d6a12;
+    }
+
+    .tag.approved {
+      background: #e6f0e0;
+      color: var(--accent-strong);
+    }
+
+    .tag.declined {
+      background: #f4e2df;
+      color: var(--decline);
+    }
+
+    .tag.archived {
+      background: #e8edf1;
+      color: #5f6a72;
+    }
+
+    .view-switcher {
+      display: inline-flex;
+      gap: 8px;
+      padding: 8px;
+      border-radius: 4px;
+      background: #ffffff;
+      border: 1px solid #dbe2e7;
+      position: absolute;
+      top: 18px;
+      right: 0;
+      z-index: 2;
+      box-shadow: none;
+    }
+
+    .view-toggle {
+      padding: 8px 12px;
+      border-radius: 2px;
+      background: transparent;
+      color: #5f6a72;
+      font-weight: 800;
+    }
+
+    .view-toggle.active {
+      background: #216b8b;
+      color: #ffffff;
+      box-shadow: none;
+    }
+
+    .hidden-by-role {
+      display: none !important;
+    }
+
+    .program-picker {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: minmax(260px, 420px);
+      gap: 10px;
+    }
+
+    .program-picker.two-up {
+      grid-template-columns: repeat(2, minmax(220px, 420px));
+    }
+
+    .request-card {
+      border-radius: 0;
+      padding: 18px;
+      background: #ffffff;
+      border: 1px solid #dbe2e7;
+      margin-top: 14px;
+      overflow-x: auto;
+    }
+
+    .inner-tabs {
+      display: inline-flex;
+      gap: 8px;
+      padding: 6px;
+      margin-bottom: 18px;
+      border-radius: 2px;
+      background: #eef2f4;
+      border: 1px solid #d9e1e6;
+      border-bottom: 1px solid #d9e1e6;
+      max-width: 100%;
+      overflow-x: auto;
+    }
+
+    .inner-tab {
+      padding: 10px 16px;
+      border-radius: 2px;
+      background: transparent;
+      color: #5f6a72;
+      font-weight: 800;
+      border: 1px solid transparent;
+    }
+
+    .inner-tab.active {
+      background: #ffffff;
+      color: var(--navy-strong);
+      box-shadow: none;
+      border-color: #bfcdd6;
+    }
+
+    .inner-panel {
+      display: none;
+      animation: fadeUp 220ms ease;
+    }
+
+    .inner-panel.active {
+      display: block;
+    }
+
+    .host-inner-tabs {
+      display: inline-flex;
+      gap: 8px;
+      padding: 6px;
+      margin-bottom: 18px;
+      border-radius: 2px;
+      background: #eef2f4;
+      border: 1px solid #d9e1e6;
+      border-bottom: 1px solid #d9e1e6;
+      max-width: 100%;
+      overflow-x: auto;
+    }
+
+    .host-inner-tab {
+      padding: 10px 16px;
+      border-radius: 2px;
+      background: transparent;
+      color: #5f6a72;
+      font-weight: 800;
+      border: 1px solid transparent;
+    }
+
+    .host-inner-tab.active {
+      background: #ffffff;
+      color: var(--navy-strong);
+      box-shadow: none;
+      border-color: #bfcdd6;
+    }
+
+    .host-inner-panel {
+      display: none;
+      animation: fadeUp 220ms ease;
+    }
+
+    .host-inner-panel.active {
+      display: block;
+    }
+
+    .collapsed-section-head {
+      display: none;
+    }
+
+    .request-list-row {
+      cursor: pointer;
+      transition: background 160ms ease;
+    }
+
+    .request-list-row:hover {
+      background: #f3f8fb;
+    }
+
+    .request-list-row.selected {
+      background: #e4f0f7;
+      box-shadow: inset 3px 0 0 #216b8b;
+    }
+
+    .request-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .request-meta {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .request-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(240px, 1fr));
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .table-responsive table {
+      min-width: 760px;
+    }
+
+    #participant-detail-table,
+    #host-detail-table {
+      white-space: nowrap;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid #cfd8de;
+      border-radius: 2px;
+      padding: 11px 12px;
+      font: inherit;
+      background: #ffffff;
+      color: var(--text);
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .callout {
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 2px;
+      background: #eef5ef;
+      color: #245d47;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .footnote {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .month-link {
+      color: var(--navy-strong);
+      background: none;
+      padding: 0;
+      font-weight: 800;
+      text-decoration: underline;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(27, 35, 42, 0.56);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 50;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-card {
+      width: min(860px, 100%);
+      background: #ffffff;
+      border: 1px solid #dbe2e7;
+      box-shadow: 0 20px 40px rgba(24, 37, 49, 0.16);
+      padding: 28px 32px;
+    }
+
+    .modal-head {
+      display: block;
+      margin-bottom: 18px;
+    }
+
+    .modal-head h4 {
+      margin: 0 0 4px;
+      color: var(--text);
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      background: none;
+      color: var(--muted);
+      font-size: 22px;
+      line-height: 1;
+      padding: 4px;
+    }
+
+    .modal-supplier {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .month-editor {
+      display: grid;
+      grid-template-columns: 180px 140px repeat(3, minmax(140px, 1fr));
+      gap: 12px 18px;
+      align-items: center;
+    }
+
+    .month-editor-head {
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .month-editor-label {
+      color: #118000;
+      font-size: 15px;
+    }
+
+    .month-editor input,
+    .month-editor select {
+      height: 42px;
+    }
+
+    .month-editor-divider {
+      border-left: 1px solid #d8d8d8;
+      padding-left: 10px;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 26px;
+    }
+
+    .button.lime {
+      background: #cfd748;
+      color: #5b5b5b;
+      min-width: 184px;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .button.gray {
+      background: #c9c9c9;
+      color: #5b5b5b;
+      min-width: 184px;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    @media (max-width: 980px) {
+      .grid.two,
+      .form-grid,
+      .program-picker.two-up {
+        grid-template-columns: 1fr;
+      }
+
+      .stat-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .shell {
+        width: 100%;
+      }
+
+      .hero {
+        padding: 20px 18px 16px;
+      }
+
+      .content {
+        padding: 18px;
+      }
+
+      .view-switcher {
+        top: 64px;
+        right: 12px;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .shell {
+        width: 100%;
+        margin-top: 58px;
+        margin-bottom: 20px;
+      }
+
+      h1 {
+        font-size: 2rem;
+        margin-top: 20px;
+      }
+
+      .hero,
+      .content,
+      .card,
+      .request-card {
+        padding: 14px;
+      }
+
+      .section-head {
+        margin-bottom: 12px;
+      }
+
+      .section-head h3 {
+        font-size: 1.15rem;
+      }
+
+      .view-switcher {
+        position: static;
+        margin-top: 16px;
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .view-toggle {
+        flex: 1 1 0;
+        text-align: center;
+      }
+
+      .inner-tabs,
+      .host-inner-tabs {
+        display: flex;
+        width: 100%;
+        gap: 0;
+      }
+
+      .inner-tab,
+      .host-inner-tab {
+        flex: 1 1 0;
+        white-space: nowrap;
+        text-align: center;
+      }
+
+      .program-picker,
+      .program-picker.two-up,
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .request-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .request-meta {
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .request-actions {
+        width: 100%;
+      }
+
+      .request-actions .button {
+        width: 100%;
+      }
+
+      .icon-actions {
+        width: auto;
+      }
+
+      .icon-actions .button {
+        width: 36px;
+      }
+
+      select[multiple] {
+        min-height: 112px;
+      }
+
+      .table-responsive table {
+        min-width: 680px;
+      }
+
+      .month-editor {
+        grid-template-columns: 1fr;
+      }
+
+      .month-editor-divider {
+        border-left: 0;
+        padding-left: 0;
+      }
+
+      .modal-actions {
+        flex-direction: column;
+      }
+
+      .modal-actions .button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <section class="hero">
+      <h1>Amendments</h1>
+      <p>
+        Need to update your commitments or join a program? Submit your request here for review.
+      </p>
+      <div class="view-switcher" role="tablist" aria-label="View mode">
+        <button class="view-toggle active" data-view="participant">Buyer View</button>
+        <button class="view-toggle" data-view="host">Host View</button>
+      </div>
+      <div class="inner-tabs" data-role-only="participant" role="tablist" aria-label="Participant request views">
+        <button class="inner-tab active" data-inner-tab="my-requests">My Request</button>
+        <button class="inner-tab" data-inner-tab="create-request">Change Request</button>
+      </div>
+      <div class="host-inner-tabs" data-role-only="host" role="tablist" aria-label="Host request views">
+        <button class="host-inner-tab active" data-host-inner-tab="host-requests">Pending Requests</button>
+        <button class="host-inner-tab" data-host-inner-tab="host-change-request">Change Request</button>
+      </div>
+    </section>
+
+    <main class="app">
+      <div class="content">
+        <section class="panel active" id="pricing">
+          <div class="section-head">
+            <div>
+              <h3>Pricing</h3>
+              <p>Existing pricing remains untouched by the new workflow. Commitment Requests operate alongside pricing, not inside it.</p>
+            </div>
+          </div>
+          <div class="grid two">
+            <div class="card">
+              <h4>Awarded pricing snapshot</h4>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th>Pack</th>
+                    <th>Unit price</th>
+                    <th>Effective</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Valencia Oranges</td>
+                    <td>40 lb</td>
+                    <td class="number">$22.50</td>
+                    <td>Jul 1, 2026</td>
+                  </tr>
+                  <tr>
+                    <td>Lemons</td>
+                    <td>38 lb</td>
+                    <td class="number">$19.75</td>
+                    <td>Jul 1, 2026</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="card">
+              <h4>Design note</h4>
+              <p>Pricing and Compliance tabs stay stable. The new workflow adds a separate approval surface instead of mixing pending commitment edits into current operational data.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" id="volumes">
+          <div class="section-head">
+            <div>
+              <h3>Volumes</h3>
+              <p id="volumes-copy">Approved commitments only. Buyers can propose changes here, but the live monthly commitments stay unchanged until host approval.</p>
+            </div>
+            <div class="actions" data-role-only="participant">
+              <button class="button primary" id="jump-to-request">Request Commitment Change</button>
+            </div>
+            <div class="actions" data-role-only="host">
+              <button class="button secondary" id="jump-to-review">Review Pending Requests</button>
+            </div>
+          </div>
+
+          <div class="stat-grid" data-role-only="host">
+            <div class="stat">
+              <span>Current approved buyers</span>
+              <strong>12</strong>
+            </div>
+            <div class="stat">
+              <span>Committed cases this month</span>
+              <strong>4,820</strong>
+            </div>
+            <div class="stat">
+              <span>Pending change requests</span>
+              <strong>2</strong>
+            </div>
+          </div>
+
+          <div class="card">
+            <h4>Approved current commitments</h4>
+            <table>
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Frequency</th>
+                  <th>Committed volume</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Valencia Oranges</td>
+                  <td>Weekly</td>
+                  <td class="number">100</td>
+                  <td><span class="tag approved">Approved live value</span></td>
+                </tr>
+                <tr>
+                  <td>Valencia Oranges</td>
+                  <td>Weekly</td>
+                  <td class="number">100</td>
+                  <td><span class="tag approved">Approved live value</span></td>
+                </tr>
+                <tr>
+                  <td>Lemons</td>
+                  <td>Weekly</td>
+                  <td class="number">140</td>
+                  <td><span class="tag approved">Approved live value</span></td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="footnote">Pending requests are intentionally not mixed into this grid.</div>
+          </div>
+        </section>
+
+        <section class="panel" id="compliance">
+          <div class="section-head">
+            <div>
+              <h3>Compliance</h3>
+              <p>Buyer compliance continues to track actual participation and performance independently from pending commitment requests.</p>
+            </div>
+          </div>
+          <div class="grid two">
+            <div class="card">
+              <h4>Compliance summary</h4>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Buyer</th>
+                    <th>YTD fill rate</th>
+                    <th>Compliance status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>North Valley Grocers</td>
+                    <td class="number">97%</td>
+                    <td><span class="tag approved">Compliant</span></td>
+                  </tr>
+                  <tr>
+                    <td>Harbor Foods</td>
+                    <td class="number">92%</td>
+                    <td><span class="tag pending">Watchlist</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="card">
+              <h4>Workflow note</h4>
+              <p>Commitment Requests can be reviewed alongside compliance context, but approval updates only the commitment data and audit history.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" id="participants">
+          <div class="section-head">
+            <div>
+              <h3 id="participants-title">Participants</h3>
+              <p id="participants-copy">Host buyers can add a buyer directly into the same Commitment Requests framework, with or without monthly commitments.</p>
+            </div>
+            <div class="actions" data-role-only="host">
+              <button class="button primary" id="jump-to-add-buyer">Add Buyer to Program</button>
+            </div>
+          </div>
+          <div class="grid two">
+            <div class="card">
+              <h4>Current participants</h4>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Buyer</th>
+                    <th>Role</th>
+                    <th>Monthly commitment</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>North Valley Grocers</td>
+                    <td>Participant buyer</td>
+                    <td class="number">200</td>
+                  </tr>
+                  <tr>
+                    <td>Harbor Foods</td>
+                    <td>Participant buyer</td>
+                    <td class="number">140</td>
+                  </tr>
+                  <tr>
+                    <td>FreshMark Retail</td>
+                    <td>Host buyer</td>
+                    <td class="number">N/A</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="card">
+              <h4 id="participants-side-title">Add buyer behavior</h4>
+              <p id="participants-side-copy">The host can create either an approved `Add New Buyer` request or an approved `Add New Buyer + Commitment` request using the same underlying data structure as a regular change request.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" id="requests">
+          <div class="section-head">
+            <div>
+              <h3 id="requests-title">Commitment Requests</h3>
+              <p id="requests-copy">Pending changes are reviewed here. This keeps live commitments clean while still giving both buyers and hosts full request visibility, reasoning, and audit context.</p>
+            </div>
+          </div>
+
+          <div data-role-only="participant">
+            <div class="inner-panel" id="create-request">
+              <div class="card" id="buyer-form">
+                <h4>Buyer request form</h4>
+                <div class="program-picker two-up">
+                  <div>
+                    <label for="participant-network">Network</label>
+                    <select id="participant-network">
+                      <option selected>My Programs</option>
+                      <option>ProAct</option>
+                      <option>FreshEdge</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="participant-program">Program</label>
+                    <select id="participant-program"></select>
+                  </div>
+                  <div>
+                    <label for="participant-suppliers">Supplier</label>
+                    <select id="participant-suppliers" multiple size="3">
+                      <option selected>Golden Grove Produce</option>
+                      <option selected>Sunrise Citrus Co.</option>
+                      <option>North Ridge Farms</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-grid" style="margin-top: 16px;">
+                  <div>
+                    <label for="request-type">Request type</label>
+                    <select id="request-type">
+                      <option selected>Change Existing Commitment</option>
+                      <option>Add To Program</option>
+                    </select>
+                  </div>
+                </div>
+
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Item Code</th>
+                      <th>Item</th>
+                      <th>Supplier</th>
+                      <th>Current Frequency</th>
+                      <th>Current</th>
+                      <th>Requested Frequency</th>
+                      <th>Requested</th>
+                      <th>Edit by Month</th>
+                      <th>Delta</th>
+                    </tr>
+                  </thead>
+                  <tbody id="participant-form-table"></tbody>
+                </table>
+
+                <div style="margin-top: 14px;">
+                  <label for="reason">Reason / comment</label>
+                  <textarea id="reason">Expected late-summer lift from back-to-school promotion.</textarea>
+                </div>
+
+                <div class="request-actions">
+                  <button class="button primary" id="submit-request">Submit Request</button>
+                </div>
+
+                <div class="callout" id="submit-status">
+                  Changes submitted here will not take effect until approved.
+                </div>
+              </div>
+            </div>
+
+            <div class="inner-panel active" id="my-requests">
+              <div class="card">
+                <h4>My Request</h4>
+                <p>All submitted change requests grouped by program. Click any request to view deeper details.</p>
+                <table style="margin-top: 16px;">
+                  <thead>
+                    <tr>
+                      <th>Program</th>
+                      <th>Date Range</th>
+                      <th>Network</th>
+                      <th>Supplier</th>
+                      <th>Request type</th>
+                      <th>Submitted</th>
+                      <th>Status</th>
+                      <th>Archive</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="request-list-row" data-request-detail="request-detail-1">
+                      <td>Summer Citrus Program</td>
+                      <td>07/01/2026 - 09/30/2026</td>
+                      <td>My Programs</td>
+                      <td>Golden Grove Produce</td>
+                      <td>Change Existing Commitment</td>
+                      <td>Jun 5, 2026</td>
+                      <td class="status-cell"><span class="tag pending">Pending</span></td>
+                      <td class="archive-cell"></td>
+                    </tr>
+                    <tr class="request-list-row" data-request-detail="request-detail-2">
+                      <td>Fall Berry Program</td>
+                      <td>10/01/2026 - 12/31/2026</td>
+                      <td>ProAct</td>
+                      <td>North Ridge Farms</td>
+                      <td>Add To Program</td>
+                      <td>May 28, 2026</td>
+                      <td class="status-cell"><span class="tag approved">Approved</span></td>
+                      <td class="archive-cell">
+                        <button class="button secondary small icon-button list-archive-button" data-request-archive="request-detail-2" title="Archive request" aria-label="Archive request">
+                          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16"></path><path d="M6 7v11h12V7"></path><path d="M9 11h6"></path><path d="M5 4h14v3H5z"></path></svg>
+                        </button>
+                      </td>
+                    </tr>
+                    <tr class="request-list-row" data-request-detail="request-detail-3">
+                      <td>Winter Avocado Program</td>
+                      <td>01/01/2027 - 03/31/2027</td>
+                      <td>FreshEdge</td>
+                      <td>Sierra Verde Packing</td>
+                      <td>Change Existing Commitment</td>
+                      <td>May 20, 2026</td>
+                      <td class="status-cell"><span class="tag declined">Declined</span></td>
+                      <td class="archive-cell">
+                        <button class="button secondary small icon-button list-archive-button" data-request-archive="request-detail-3" title="Archive request" aria-label="Archive request">
+                          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16"></path><path d="M6 7v11h12V7"></path><path d="M9 11h6"></path><path d="M5 4h14v3H5z"></path></svg>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="request-card" id="participant-request-card">
+                <div class="request-header">
+                  <div>
+                    <h4 style="margin: 0 0 6px;" id="participant-detail-title">Summer Citrus Program • Change Existing Commitment</h4>
+                    <div class="request-meta" id="participant-detail-meta">
+                      <span>Submitted: Jun 5, 2026</span>
+                      <span>Status: Pending host approval</span>
+                      <span>Program: Summer Citrus Program</span>
+                    </div>
+                  </div>
+                  <span class="tag pending" id="participant-detail-status">Pending</span>
+                </div>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Item Code</th>
+                      <th>Item</th>
+                      <th>Supplier</th>
+                      <th>Current Frequency</th>
+                      <th>Current volume</th>
+                      <th>Requested Frequency</th>
+                      <th>Requested volume</th>
+                      <th>Delta</th>
+                    </tr>
+                  </thead>
+                  <tbody id="participant-detail-table">
+                    <tr>
+                      <td>Valencia Oranges</td>
+                      <td>Weekly</td>
+                      <td class="number">100</td>
+                      <td class="number">130</td>
+                      <td class="number delta-pos">+30</td>
+                    </tr>
+                    <tr>
+                      <td>Valencia Oranges</td>
+                      <td>Weekly</td>
+                      <td class="number">100</td>
+                      <td class="number">120</td>
+                      <td class="number delta-pos">+20</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="request-actions">
+                  <button class="button decline" id="cancel-participant-request">Cancel Request</button>
+                </div>
+                <div class="callout" id="participant-action-status">
+                  Your request is pending.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div data-role-only="host">
+            <div class="host-inner-panel" id="host-change-request">
+              <div class="card" id="host-request-form">
+                <h4>Host change request form</h4>
+                <div class="program-picker two-up">
+                  <div>
+                    <label for="host-program">Program</label>
+                    <select id="host-program">
+                      <option selected>Summer Citrus Program (07/01/2026 - 09/30/2026)</option>
+                      <option>Fall Berry Program (10/01/2026 - 12/31/2026)</option>
+                      <option>Winter Avocado Program (01/01/2027 - 03/31/2027)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="host-suppliers">Supplier</label>
+                    <select id="host-suppliers" multiple size="3">
+                      <option selected>Golden Grove Produce</option>
+                      <option selected>Sunrise Citrus Co.</option>
+                      <option>North Ridge Farms</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-grid" style="margin-top: 16px;">
+                  <div>
+                    <label for="host-request-type">Request type</label>
+                    <select id="host-request-type">
+                      <option selected>Change Existing Commitment</option>
+                      <option>Add To Program</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="target-buyer">Buyer</label>
+                    <select id="target-buyer">
+                      <option selected>North Valley Grocers</option>
+                      <option>Harbor Foods</option>
+                      <option>Sunrise Market Co.</option>
+                    </select>
+                  </div>
+                </div>
+
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Item Code</th>
+                      <th>Item</th>
+                      <th>Supplier</th>
+                      <th>Current Frequency</th>
+                      <th>Current</th>
+                      <th>Requested Frequency</th>
+                      <th>Requested</th>
+                      <th>Edit by Month</th>
+                      <th>Delta</th>
+                    </tr>
+                  </thead>
+                  <tbody id="host-form-table"></tbody>
+                </table>
+
+                <div style="margin-top: 14px;">
+                  <label for="host-note">Reason / comment</label>
+                  <textarea id="host-note">Host-initiated change request for updated weekly commitments.</textarea>
+                </div>
+
+                <div class="request-actions">
+                  <button class="button primary" id="simulate-add-buyer">Submit Request</button>
+                </div>
+                <div class="callout" id="add-buyer-status">
+                  Changes submitted here will not take effect until approved.
+                </div>
+              </div>
+            </div>
+
+            <div class="host-inner-panel active" id="host-requests">
+              <div class="card">
+                <h4>Pending Requests</h4>
+                <p>All system requests across programs. Click any request to review its full details.</p>
+                <table style="margin-top: 16px;">
+                  <thead>
+                    <tr>
+                      <th>Program</th>
+                      <th>Date Range</th>
+                      <th>Buyer</th>
+                      <th>Supplier</th>
+                      <th>Request type</th>
+                      <th>Submitted</th>
+                      <th>Status</th>
+                      <th>Archive</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="request-list-row host-request-list-row" data-host-request-detail="host-request-detail-1">
+                      <td>Summer Citrus Program</td>
+                      <td>07/01/2026 - 09/30/2026</td>
+                      <td>North Valley Grocers</td>
+                      <td>Golden Grove Produce</td>
+                      <td>Change Existing Commitment</td>
+                      <td>Jun 5, 2026</td>
+                      <td class="status-cell"><span class="tag pending">Pending</span></td>
+                      <td class="archive-cell"></td>
+                    </tr>
+                    <tr class="request-list-row host-request-list-row" data-host-request-detail="host-request-detail-2">
+                      <td>Fall Berry Program</td>
+                      <td>10/01/2026 - 12/31/2026</td>
+                      <td>Sunrise Market Co.</td>
+                      <td>North Ridge Farms</td>
+                      <td>Add To Program</td>
+                      <td>May 28, 2026</td>
+                      <td class="status-cell"><span class="tag approved">Approved</span></td>
+                      <td class="archive-cell">
+                        <button class="button secondary small icon-button host-list-archive-button" data-host-request-archive="host-request-detail-2" title="Archive request" aria-label="Archive request">
+                          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16"></path><path d="M6 7v11h12V7"></path><path d="M9 11h6"></path><path d="M5 4h14v3H5z"></path></svg>
+                        </button>
+                      </td>
+                    </tr>
+                    <tr class="request-list-row host-request-list-row" data-host-request-detail="host-request-detail-3">
+                      <td>Winter Avocado Program</td>
+                      <td>01/01/2027 - 03/31/2027</td>
+                      <td>Harbor Foods</td>
+                      <td>Sierra Verde Packing</td>
+                      <td>Change Existing Commitment</td>
+                      <td>May 20, 2026</td>
+                      <td class="status-cell"><span class="tag declined">Declined</span></td>
+                      <td class="archive-cell">
+                        <button class="button secondary small icon-button host-list-archive-button" data-host-request-archive="host-request-detail-3" title="Archive request" aria-label="Archive request">
+                          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16"></path><path d="M6 7v11h12V7"></path><path d="M9 11h6"></path><path d="M5 4h14v3H5z"></path></svg>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="request-card" id="host-request-card">
+                <div class="request-header">
+                  <div>
+                    <h4 style="margin: 0 0 6px;" id="host-detail-title">Summer Citrus Program • North Valley Grocers</h4>
+                    <div class="request-meta" id="host-detail-meta">
+                      <span>Type: Change Existing Commitment</span>
+                      <span>Submitted: Jun 5, 2026</span>
+                      <span>Buyer: North Valley Grocers</span>
+                    </div>
+                  </div>
+                  <span class="tag pending" id="host-detail-status">Pending</span>
+                </div>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Item Code</th>
+                      <th>Item</th>
+                      <th>Current Frequency</th>
+                      <th>Current volume</th>
+                      <th>Requested Frequency</th>
+                      <th>Requested volume</th>
+                      <th>Delta</th>
+                      <th>Line Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="host-detail-table">
+                    <tr data-current-volume="100">
+                      <td>Valencia Oranges</td>
+                      <td>Weekly</td>
+                      <td class="number">100</td>
+                      <td class="number requested-cell">130</td>
+                      <td class="number delta-cell delta-pos">+30</td>
+                      <td>
+                        <div class="request-actions icon-actions">
+                          <button class="button primary small icon-button line-approve" title="Approve line item" aria-label="Approve line item">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>
+                          </button>
+                          <button class="button decline small icon-button line-decline" title="Decline line item" aria-label="Decline line item">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+                          </button>
+                          <button class="button revision small icon-button line-revise" title="Edit requested volume" aria-label="Edit requested volume">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4l10-10-4-4L4 16v4zM13 7l4 4"/></svg>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr data-current-volume="100">
+                      <td>Valencia Oranges</td>
+                      <td>Weekly</td>
+                      <td class="number">100</td>
+                      <td class="number requested-cell">120</td>
+                      <td class="number delta-cell delta-pos">+20</td>
+                      <td>
+                        <div class="request-actions icon-actions">
+                          <button class="button primary small icon-button line-approve" title="Approve line item" aria-label="Approve line item">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>
+                          </button>
+                          <button class="button decline small icon-button line-decline" title="Decline line item" aria-label="Decline line item">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+                          </button>
+                          <button class="button revision small icon-button line-revise" title="Edit requested volume" aria-label="Edit requested volume">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4l10-10-4-4L4 16v4zM13 7l4 4"/></svg>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="message-panel">
+                  <h5>Send to Supplier for Approval</h5>
+                  <p>Route this pending request to the selected supplier for confirmation before final approval.</p>
+                  <div class="form-grid" style="margin-top: 0;">
+                    <div>
+                      <label for="supplier-approval-target">Supplier recipient</label>
+                      <select id="supplier-approval-target">
+                        <option selected>Golden Grove Produce</option>
+                        <option>Sunrise Citrus Co.</option>
+                        <option>North Ridge Farms</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="request-actions">
+                    <button class="button secondary" id="send-to-supplier">
+                      <svg viewBox="0 0 24 24" aria-hidden="true" style="width:16px;height:16px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;">
+                        <path d="M22 2L11 13"></path>
+                        <path d="M22 2L15 22l-4-9-9-4 20-7z"></path>
+                      </svg>
+                      Send Approval Message
+                    </button>
+                  </div>
+                  <div class="submit-token" id="supplier-submit-token"></div>
+                </div>
+                <div class="callout" id="host-action-status"></div>
+                <div style="margin-top: 18px;">
+                  <label>Approval Log</label>
+                  <ul class="log-list" id="supplier-approval-log">
+                    <li class="log-item"><strong>Jun 5, 2026 10:18 AM</strong> Host opened this pending request for review.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div class="modal-overlay" id="month-modal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div>
+          <h4>Supplier</h4>
+          <div class="modal-supplier" id="month-modal-title">JC WATSON (DEMO)</div>
+        </div>
+        <button class="modal-close" id="month-modal-close" aria-label="Close modal">×</button>
+      </div>
+      <div class="month-editor">
+        <div></div>
+        <div class="month-editor-head">Frequency</div>
+        <div class="month-editor-head" id="month-head-1">05/26</div>
+        <div class="month-editor-head" id="month-head-2">06/26</div>
+        <div class="month-editor-head" id="month-head-3">07/26</div>
+
+        <div class="month-editor-label">Confirm Units</div>
+        <div>
+          <select id="month-modal-frequency">
+            <option>Weekly</option>
+            <option>Monthly</option>
+          </select>
+        </div>
+        <div><input type="number" min="0" step="1" id="month-input-0" /></div>
+        <div class="month-editor-divider"><input type="number" min="0" step="1" id="month-input-1" /></div>
+        <div class="month-editor-divider"><input type="number" min="0" step="1" id="month-input-2" /></div>
+      </div>
+      <div class="modal-actions">
+        <button class="button lime" id="month-modal-save">Save and Select</button>
+        <button class="button gray" id="month-modal-cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tabs = [...document.querySelectorAll(".tab")];
+    const panels = [...document.querySelectorAll(".panel")];
+    const viewToggles = [...document.querySelectorAll(".view-toggle")];
+    const roleOnlyBlocks = [...document.querySelectorAll("[data-role-only]")];
+    const roleOnlyTabs = [...document.querySelectorAll("[data-role-only-tab]")];
+    const innerTabs = [...document.querySelectorAll(".inner-tab")];
+    const innerPanels = [...document.querySelectorAll(".inner-panel")];
+    const requestRows = [...document.querySelectorAll(".request-list-row")];
+    const hostInnerTabs = [...document.querySelectorAll(".host-inner-tab")];
+    const hostInnerPanels = [...document.querySelectorAll(".host-inner-panel")];
+    const hostRequestRows = [...document.querySelectorAll(".host-request-list-row")];
+    let activeView = "participant";
+    let activeInnerTab = "my-requests";
+    let activeHostInnerTab = "host-requests";
+    let activeHostRequestDetailId = "host-request-detail-1";
+    let activeParticipantRequestDetailId = "request-detail-1";
+    let activeMonthEdit = null;
+
+    const participantFormRows = [
+      { id: "p-1", code: "ORG-4012", item: "Valencia Oranges", supplier: "Golden Grove Produce", currentFrequency: "Weekly", requestedFrequency: "Monthly", current: 100, requested: 130, monthly: [{ month: "Jul 2026", requested: 40 }, { month: "Aug 2026", requested: 45 }, { month: "Sep 2026", requested: 45 }] },
+      { id: "p-2", code: "ORG-4013", item: "Navel Oranges", supplier: "Sunrise Citrus Co.", currentFrequency: "Weekly", requestedFrequency: "Weekly", current: 90, requested: 105, monthly: [{ month: "Jul 2026", requested: 30 }, { month: "Aug 2026", requested: 35 }, { month: "Sep 2026", requested: 40 }] },
+      { id: "p-3", code: "BRY-1188", item: "Blueberries", supplier: "North Ridge Farms", currentFrequency: "Weekly", requestedFrequency: "Monthly", current: 60, requested: 72, monthly: [{ month: "Jul 2026", requested: 22 }, { month: "Aug 2026", requested: 24 }, { month: "Sep 2026", requested: 26 }] }
+    ];
+
+    const participantProgramsByNetwork = {
+      "My Programs": [
+        "Summer Citrus Program (07/01/2026 - 09/30/2026)",
+        "Fall Berry Program (10/01/2026 - 12/31/2026)",
+        "Winter Avocado Program (01/01/2027 - 03/31/2027)"
+      ],
+      "ProAct": [
+        "ProAct Citrus Alliance (07/01/2026 - 09/30/2026)",
+        "ProAct Berry Forward (10/01/2026 - 12/31/2026)",
+        "ProAct Winter Greens (01/01/2027 - 03/31/2027)"
+      ],
+      "FreshEdge": [
+        "FreshEdge Orchard Program (07/01/2026 - 09/30/2026)",
+        "FreshEdge Local Produce (10/01/2026 - 12/31/2026)",
+        "FreshEdge Seasonal Citrus (01/01/2027 - 03/31/2027)"
+      ]
+    };
+
+    const participantSuppliersByProgram = {
+      "Summer Citrus Program (07/01/2026 - 09/30/2026)": ["Golden Grove Produce", "Sunrise Citrus Co."],
+      "Fall Berry Program (10/01/2026 - 12/31/2026)": ["North Ridge Farms"],
+      "Winter Avocado Program (01/01/2027 - 03/31/2027)": ["Sierra Verde Packing"],
+      "ProAct Citrus Alliance (07/01/2026 - 09/30/2026)": ["Golden Grove Produce", "Citrus Supplier SB"],
+      "ProAct Berry Forward (10/01/2026 - 12/31/2026)": ["North Ridge Farms", "River Fresh"],
+      "ProAct Winter Greens (01/01/2027 - 03/31/2027)": ["Central Valley Greens"],
+      "FreshEdge Orchard Program (07/01/2026 - 09/30/2026)": ["Golden Grove Produce"],
+      "FreshEdge Local Produce (10/01/2026 - 12/31/2026)": ["River Fresh", "North Ridge Farms"],
+      "FreshEdge Seasonal Citrus (01/01/2027 - 03/31/2027)": ["Sunrise Citrus Co.", "Citrus Supplier SB"]
+    };
+
+    const hostFormRows = [
+      { id: "h-1", code: "ORG-4012", item: "Valencia Oranges", supplier: "Golden Grove Produce", currentFrequency: "Weekly", requestedFrequency: "Monthly", current: 100, requested: 130, monthly: [{ month: "Jul 2026", requested: 40 }, { month: "Aug 2026", requested: 45 }, { month: "Sep 2026", requested: 45 }] },
+      { id: "h-2", code: "ORG-4013", item: "Navel Oranges", supplier: "Sunrise Citrus Co.", currentFrequency: "Weekly", requestedFrequency: "Weekly", current: 95, requested: 110, monthly: [{ month: "Jul 2026", requested: 35 }, { month: "Aug 2026", requested: 35 }, { month: "Sep 2026", requested: 40 }] },
+      { id: "h-3", code: "BRY-1188", item: "Blueberries", supplier: "North Ridge Farms", currentFrequency: "Weekly", requestedFrequency: "Monthly", current: 80, requested: 88, monthly: [{ month: "Jul 2026", requested: 28 }, { month: "Aug 2026", requested: 30 }, { month: "Sep 2026", requested: 30 }] }
+    ];
+
+    const requestDetails = {
+      "request-detail-1": {
+        title: "Summer Citrus Program • Change Existing Commitment",
+        meta: ["Submitted: Jun 5, 2026", "Status: Pending host approval", "Program: Summer Citrus Program", "Network: My Programs"],
+        status: "Pending",
+        statusClass: "pending",
+        rows: [
+          ["ORG-4012", "Valencia Oranges", "Golden Grove Produce", "Weekly", "Monthly", "100", "130", "+30", "delta-pos"],
+          ["ORG-4012", "Valencia Oranges", "Golden Grove Produce", "Weekly", "Weekly", "100", "120", "+20", "delta-pos"]
+        ],
+        callout: "Your request is pending."
+      },
+      "request-detail-2": {
+        title: "Fall Berry Program • Add To Program",
+        meta: ["Submitted: May 28, 2026", "Status: Approved", "Program: Fall Berry Program", "Network: ProAct"],
+        status: "Approved",
+        statusClass: "approved",
+        rows: [
+          ["BRY-1188", "Blueberries", "North Ridge Farms", "Weekly", "Monthly", "0", "75", "+75", "delta-pos"]
+        ],
+        callout: "This request was approved. The requested program participation is now live."
+      },
+      "request-detail-3": {
+        title: "Winter Avocado Program • Change Existing Commitment",
+        meta: ["Submitted: May 20, 2026", "Status: Declined", "Program: Winter Avocado Program", "Network: FreshEdge"],
+        status: "Declined",
+        statusClass: "declined",
+        rows: [
+          ["AVO-7741", "Avocados", "Sierra Verde Packing", "Weekly", "Monthly", "90", "60", "-30", "delta-neg"]
+        ],
+        callout: "This request was declined. Live committed volume remains unchanged."
+      },
+      "request-detail-4": {
+        title: "Spring Citrus Program • Add To Program",
+        meta: ["Submitted: May 15, 2026", "Status: Cancelled", "Program: Spring Citrus Program", "Network: My Programs"],
+        status: "Cancelled",
+        statusClass: "declined",
+        rows: [
+          ["ORG-5550", "Cara Cara Oranges", "Golden Grove Produce", "Weekly", "Weekly", "0", "40", "+40", "delta-pos"]
+        ],
+        callout: "This request was cancelled by the participant."
+      }
+    };
+
+    const hostRequestDetails = {
+      "host-request-detail-1": {
+        title: "Summer Citrus Program • North Valley Grocers",
+        meta: ["Type: Change Existing Commitment", "Submitted: Jun 5, 2026", "Buyer: North Valley Grocers"],
+        status: "Pending",
+        statusClass: "pending",
+        suppliers: ["Golden Grove Produce", "Sunrise Citrus Co."],
+        rows: [
+          ["ORG-4012", "Valencia Oranges", "Weekly", "Monthly", "100", "130", "+30", "delta-pos"],
+          ["ORG-4013", "Valencia Oranges", "Weekly", "Weekly", "100", "120", "+20", "delta-pos"]
+        ],
+        callout: "",
+        log: [
+          "Jun 5, 2026 10:18 AM|Host opened this pending request for review."
+        ]
+      },
+      "host-request-detail-2": {
+        title: "Fall Berry Program • Sunrise Market Co.",
+        meta: ["Type: Add To Program", "Submitted: May 28, 2026", "Buyer: Sunrise Market Co."],
+        status: "Approved",
+        statusClass: "approved",
+        suppliers: ["North Ridge Farms"],
+        rows: [
+          ["BRY-1188", "Blueberries", "Weekly", "Monthly", "0", "75", "+75", "delta-pos"]
+        ],
+        callout: "This request was approved and is now live in the system.",
+        log: [
+          "May 28, 2026 09:05 AM|Host created request.",
+          "May 28, 2026 09:14 AM|Approved and applied to live commitments."
+        ]
+      },
+      "host-request-detail-3": {
+        title: "Winter Avocado Program • Harbor Foods",
+        meta: ["Type: Change Existing Commitment", "Submitted: May 20, 2026", "Buyer: Harbor Foods"],
+        status: "Declined",
+        statusClass: "declined",
+        suppliers: ["Sierra Verde Packing"],
+        rows: [
+          ["AVO-7741", "Avocados", "Weekly", "Monthly", "90", "60", "-30", "delta-neg"]
+        ],
+        callout: "This request was declined. No live commitment changes were applied.",
+        log: [
+          "May 20, 2026 01:10 PM|Host reviewed request.",
+          "May 20, 2026 01:24 PM|Declined. No live commitment changes were applied."
+        ]
+      }
+    };
+
+    const viewConfig = {
+      participant: {
+        volumesCopy: "Approved commitments only. You can request changes here, but the live monthly commitments stay unchanged until host approval.",
+        participantsTitle: "Participants",
+        participantsCopy: "Participants are visible read-only here. Adding buyers remains a host-only action handled through Commitment Requests.",
+        participantsSideTitle: "Participant access",
+        participantsSideCopy: "Participant buyers can see who is in the program, but they cannot add buyers or approve program participation changes.",
+        requestsTitle: "Change Request",
+        requestsCopy: "Submit and track your change request here. Pending requests stay separate from live until approved."
+      },
+      host: {
+        volumesCopy: "Approved commitments only. Use Commitment Requests to review pending changes before any live monthly commitment is updated.",
+        participantsTitle: "Participants",
+        participantsCopy: "Host buyers can add a buyer directly into the same Commitment Requests framework, with or without monthly commitments.",
+        participantsSideTitle: "Add buyer behavior",
+        participantsSideCopy: "The host can create either an approved `Add New Buyer` request or an approved `Add New Buyer + Commitment` request using the same underlying data structure as a regular change request.",
+        requestsTitle: "Change Request",
+        requestsCopy: "Submit and track your change request here. Pending requests stay separate from live until approved."
+      }
+    };
+
+    function activateTab(name) {
+      tabs.forEach((tab) => tab.classList.toggle("active", tab.dataset.tab === name));
+      panels.forEach((panel) => panel.classList.toggle("active", panel.id === name));
+    }
+
+    function highlightSelectedRequestRow(rows, detailAttribute, detailId) {
+      rows.forEach((row) => {
+        row.classList.toggle("selected", row.dataset[detailAttribute] === detailId);
+      });
+    }
+
+    function activateInnerTab(name) {
+      activeInnerTab = name;
+      innerTabs.forEach((tab) => tab.classList.toggle("active", tab.dataset.innerTab === name));
+      innerPanels.forEach((panel) => panel.classList.toggle("active", panel.id === name));
+      document.querySelector("#requests .section-head").classList.toggle("collapsed-section-head", name === "my-requests");
+    }
+
+    function activateHostInnerTab(name) {
+      activeHostInnerTab = name;
+      hostInnerTabs.forEach((tab) => tab.classList.toggle("active", tab.dataset.hostInnerTab === name));
+      hostInnerPanels.forEach((panel) => panel.classList.toggle("active", panel.id === name));
+      document.querySelector("#requests .section-head").classList.toggle("collapsed-section-head", name === "host-requests");
+    }
+
+    function archiveCellHtml(archiveAttribute, detailId, status) {
+      if (!["Approved", "Declined"].includes(status)) return "";
+      return `
+        <button class="button secondary small icon-button ${archiveAttribute === "data-request-archive" ? "list-archive-button" : "host-list-archive-button"}" ${archiveAttribute}="${detailId}" title="Archive request" aria-label="Archive request">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16"></path><path d="M6 7v11h12V7"></path><path d="M9 11h6"></path><path d="M5 4h14v3H5z"></path></svg>
+        </button>
+      `;
+    }
+
+    function updateRequestListRowStatus(rowSelector, status, statusClass, detailId, isHost = false) {
+      const row = document.querySelector(rowSelector);
+      const statusCell = row?.querySelector(".status-cell");
+      const archiveCell = row?.querySelector(".archive-cell");
+      if (!statusCell || !archiveCell) return;
+      statusCell.innerHTML = `<span class="tag ${statusClass}">${status}</span>`;
+      archiveCell.innerHTML = status === "Archived"
+        ? ""
+        : archiveCellHtml(isHost ? "data-host-request-archive" : "data-request-archive", detailId, status);
+      bindListArchiveButtons();
+    }
+
+    function renderRequestDetail(detailId) {
+      const detail = requestDetails[detailId];
+      if (!detail) return;
+      activeParticipantRequestDetailId = detailId;
+      highlightSelectedRequestRow(requestRows, "requestDetail", detailId);
+
+      document.getElementById("participant-detail-title").textContent = detail.title;
+      document.getElementById("participant-detail-meta").innerHTML = detail.meta.map((item) => `<span>${item}</span>`).join("");
+
+      const statusEl = document.getElementById("participant-detail-status");
+      statusEl.textContent = detail.status;
+      statusEl.className = `tag ${detail.statusClass}`;
+
+      document.getElementById("participant-detail-table").innerHTML = detail.rows.map((row) => `
+        <tr>
+          <td class="number">${row[0]}</td>
+          <td>${row[1]}</td>
+          <td>${row[2]}</td>
+          <td>${row[3]}</td>
+          <td class="number">${row[5]}</td>
+          <td>${row[4]}</td>
+          <td class="number">${row[6]}</td>
+          <td class="number ${row[8]}">${row[7]}</td>
+        </tr>
+      `).join("");
+
+      document.getElementById("participant-action-status").textContent = detail.callout;
+      const cancelButton = document.getElementById("cancel-participant-request");
+      cancelButton.style.display = detail.status === "Pending" ? "inline-flex" : "none";
+    }
+
+    function selectedValues(selectId) {
+      return [...document.getElementById(selectId).selectedOptions].map((option) => option.value);
+    }
+
+    function populateParticipantPrograms() {
+      const network = document.getElementById("participant-network").value;
+      const programSelect = document.getElementById("participant-program");
+      const programs = participantProgramsByNetwork[network] || [];
+      programSelect.innerHTML = programs.map((program, index) => `
+        <option ${index === 0 ? "selected" : ""}>${program}</option>
+      `).join("");
+      populateParticipantSuppliers();
+    }
+
+    function populateParticipantSuppliers() {
+      const program = document.getElementById("participant-program").value;
+      const supplierSelect = document.getElementById("participant-suppliers");
+      const suppliers = participantSuppliersByProgram[program] || [];
+      supplierSelect.innerHTML = suppliers.map((supplier, index) => `
+        <option ${index < 2 ? "selected" : ""}>${supplier}</option>
+      `).join("");
+      renderChangeRequestTable("participant-form-table", participantFormRows, "participant-suppliers", "participant");
+    }
+
+    function bindDeltaInputs(scope = document) {
+      scope.querySelectorAll("input[data-current]").forEach((input) => {
+        input.addEventListener("input", () => {
+          const current = Number(input.dataset.current);
+          const next = Number(input.value || 0);
+          const delta = next - current;
+          const target = document.getElementById(input.dataset.deltaTarget);
+          target.textContent = `${delta > 0 ? "+" : ""}${delta}`;
+          target.classList.toggle("delta-pos", delta >= 0);
+          target.classList.toggle("delta-neg", delta < 0);
+        });
+      });
+    }
+
+    function bindRequestedVolumeInputs(scope = document) {
+      scope.querySelectorAll("input[data-form-type][data-row-id]").forEach((input) => {
+        input.addEventListener("input", () => {
+          const rows = getFormRows(input.dataset.formType);
+          const row = rows.find((item) => item.id === input.dataset.rowId);
+          if (row) {
+            row.requested = Number(input.value || 0);
+            row.showRequestedRange = false;
+          }
+        });
+      });
+    }
+
+    function bindRequestedFrequencyInputs(scope = document) {
+      scope.querySelectorAll(".line-frequency").forEach((select) => {
+        select.addEventListener("change", () => {
+          const rows = getFormRows(select.dataset.formType);
+          const row = rows.find((item) => item.id === select.dataset.rowId);
+          if (row) {
+            row.requestedFrequency = select.value;
+          }
+        });
+      });
+    }
+
+    function getFormRows(formType) {
+      return formType === "participant" ? participantFormRows : hostFormRows;
+    }
+
+    function openMonthModal(formType, rowId) {
+      const rows = getFormRows(formType);
+      const row = rows.find((item) => item.id === rowId);
+      if (!row) return;
+      activeMonthEdit = { formType, rowId };
+      document.getElementById("month-modal-title").textContent = row.supplier.toUpperCase();
+      document.getElementById("month-modal-frequency").value = row.requestedFrequency;
+
+      const months = row.monthly.slice(0, 3);
+      months.forEach((entry, index) => {
+        document.getElementById(`month-head-${index + 1}`).textContent = entry.month;
+        document.getElementById(`month-input-${index}`).value = entry.requested;
+      });
+
+      for (let index = months.length; index < 3; index += 1) {
+        document.getElementById(`month-head-${index + 1}`).textContent = "--";
+        document.getElementById(`month-input-${index}`).value = "";
+      }
+      document.getElementById("month-modal").classList.add("open");
+    }
+
+    function closeMonthModal() {
+      activeMonthEdit = null;
+      document.getElementById("month-modal").classList.remove("open");
+    }
+
+    function saveMonthModal() {
+      if (!activeMonthEdit) return;
+      const rows = getFormRows(activeMonthEdit.formType);
+      const row = rows.find((item) => item.id === activeMonthEdit.rowId);
+      if (!row) return;
+      row.requestedFrequency = document.getElementById("month-modal-frequency").value;
+      const inputs = [0, 1, 2].map((index) => document.getElementById(`month-input-${index}`));
+      row.monthly = row.monthly.map((entry, index) => ({
+        month: entry.month,
+        requested: Number(inputs[index].value || 0)
+      }));
+      row.requested = row.monthly.reduce((sum, item) => sum + item.requested, 0);
+      row.showRequestedRange = true;
+
+      if (activeMonthEdit.formType === "participant") {
+        renderChangeRequestTable("participant-form-table", participantFormRows, "participant-suppliers", "participant");
+      } else {
+        renderChangeRequestTable("host-form-table", hostFormRows, "host-suppliers", "host-form");
+      }
+      closeMonthModal();
+    }
+
+    function bindMonthButtons(scope = document) {
+      scope.querySelectorAll(".edit-by-month").forEach((button) => {
+        button.onclick = () => openMonthModal(button.dataset.formType, button.dataset.rowId);
+      });
+    }
+
+    function getRequestedDisplay(row, prefix, deltaId) {
+      const formType = prefix === "participant" ? "participant" : "host";
+      if (row.showRequestedRange && row.monthly?.length) {
+        const monthlyValues = row.monthly.map((entry) => Number(entry.requested || 0));
+        const low = Math.min(...monthlyValues);
+        const high = Math.max(...monthlyValues);
+        return `<div class="requested-display">${low} - ${high}</div>`;
+      }
+
+      return `<input class="requested-input" data-current="${row.current}" data-delta-target="${deltaId}" data-form-type="${formType}" data-row-id="${row.id}" value="${row.requested}" />`;
+    }
+
+    function renderChangeRequestTable(tableBodyId, rows, supplierSelectId, prefix) {
+      const suppliers = selectedValues(supplierSelectId);
+      const filteredRows = suppliers.length ? rows.filter((row) => suppliers.includes(row.supplier)) : rows;
+      const tbody = document.getElementById(tableBodyId);
+
+      tbody.innerHTML = filteredRows.map((row, index) => {
+        const delta = row.requested - row.current;
+        const deltaId = `${prefix}-delta-${index}`;
+        return `
+          <tr data-row-id="${row.id}">
+            <td class="number">${row.code}</td>
+            <td>${row.item}</td>
+            <td>${row.supplier}</td>
+            <td>${row.currentFrequency}</td>
+            <td class="number">${row.current}</td>
+            <td>
+              <select class="line-frequency" data-form-type="${prefix === "participant" ? "participant" : "host"}" data-row-id="${row.id}">
+                <option ${row.requestedFrequency === "Weekly" ? "selected" : ""}>Weekly</option>
+                <option ${row.requestedFrequency === "Monthly" ? "selected" : ""}>Monthly</option>
+              </select>
+            </td>
+            <td>${getRequestedDisplay(row, prefix, deltaId)}</td>
+            <td><button class="month-link edit-by-month" data-form-type="${prefix === "participant" ? "participant" : "host"}" data-row-id="${row.id}">Edit by Month</button></td>
+            <td class="number ${delta >= 0 ? "delta-pos" : "delta-neg"}" id="${deltaId}">${delta > 0 ? "+" : ""}${delta}</td>
+          </tr>
+        `;
+      }).join("") || `
+        <tr>
+          <td colspan="9">No items match the selected suppliers.</td>
+        </tr>
+      `;
+
+      bindDeltaInputs(tbody);
+      bindRequestedVolumeInputs(tbody);
+      bindRequestedFrequencyInputs(tbody);
+      bindMonthButtons(tbody);
+    }
+
+    function actionButtonsHtml() {
+      return `
+        <div class="request-actions icon-actions">
+          <button class="button primary small icon-button line-approve" title="Approve line item" aria-label="Approve line item">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>
+          </button>
+          <button class="button decline small icon-button line-decline" title="Decline line item" aria-label="Decline line item">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+          <button class="button revision small icon-button line-revise" title="Edit requested volume" aria-label="Edit requested volume">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4l10-10-4-4L4 16v4zM13 7l4 4"/></svg>
+          </button>
+        </div>
+      `;
+    }
+
+    function editButtonsHtml() {
+      return `
+        <div class="request-actions icon-actions">
+          <button class="button success small icon-button line-save-edit" title="Save line item edit" aria-label="Save line item edit">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>
+          </button>
+          <button class="button decline small icon-button line-cancel-edit" title="Cancel line item edit" aria-label="Cancel line item edit">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+        </div>
+      `;
+    }
+
+    function renderHostRequestDetail(detailId) {
+      const detail = hostRequestDetails[detailId];
+      if (!detail) return;
+      activeHostRequestDetailId = detailId;
+      highlightSelectedRequestRow(hostRequestRows, "hostRequestDetail", detailId);
+
+      document.getElementById("host-detail-title").textContent = detail.title;
+      document.getElementById("host-detail-meta").innerHTML = detail.meta.map((item) => `<span>${item}</span>`).join("");
+
+      const statusEl = document.getElementById("host-detail-status");
+      statusEl.textContent = detail.status;
+      statusEl.className = `tag ${detail.statusClass}`;
+
+      document.getElementById("host-detail-table").innerHTML = detail.rows.map((row, index) => `
+        <tr data-current-volume="${row[4]}" data-row-index="${index}">
+          <td class="number">${row[0]}</td>
+          <td>${row[1]}</td>
+          <td>${row[2]}</td>
+          <td class="number">${row[4]}</td>
+          <td class="requested-frequency-cell">${row[3]}</td>
+          <td class="number requested-cell">${row[5]}</td>
+          <td class="number delta-cell ${row[7]}">${row[6]}</td>
+          <td>
+            ${actionButtonsHtml()}
+          </td>
+        </tr>
+      `).join("");
+
+      document.getElementById("supplier-approval-target").innerHTML = detail.suppliers.map((supplier) => `
+        <option>${supplier}</option>
+      `).join("");
+
+      document.getElementById("host-action-status").textContent = detail.callout;
+      document.getElementById("supplier-approval-log").innerHTML = detail.log.map((entry) => {
+        const [time, message] = entry.split("|");
+        return `<li class="log-item"><strong>${time}</strong> ${message}</li>`;
+      }).join("");
+      bindHostLineActions();
+    }
+
+    function archiveParticipantRequest(detailId) {
+      const detail = requestDetails[detailId];
+      if (!detail || !["Approved", "Declined"].includes(detail.status)) return;
+      const previousStatus = detail.status;
+      detail.status = "Archived";
+      detail.statusClass = "archived";
+      detail.meta = detail.meta.map((item) => item.startsWith("Status:") ? "Status: Archived" : item);
+      detail.callout = `This ${previousStatus.toLowerCase()} request was archived.`;
+      updateRequestListRowStatus(`[data-request-detail="${detailId}"]`, detail.status, detail.statusClass, detailId, false);
+      if (activeParticipantRequestDetailId === detailId) {
+        renderRequestDetail(detailId);
+      }
+    }
+
+    function archiveHostRequest(detailId) {
+      const detail = hostRequestDetails[detailId];
+      if (!detail || !["Approved", "Declined"].includes(detail.status)) return;
+      const previousStatus = detail.status;
+      detail.status = "Archived";
+      detail.statusClass = "archived";
+      detail.meta = detail.meta.map((item) => item.startsWith("Status:") ? "Status: Archived" : item);
+      detail.callout = `This ${previousStatus.toLowerCase()} request was archived.`;
+      detail.log.unshift(`${formatHostLogTimestamp()}|Host archived this ${previousStatus.toLowerCase()} request.`);
+      updateRequestListRowStatus(`[data-host-request-detail="${detailId}"]`, detail.status, detail.statusClass, detailId, true);
+      if (activeHostRequestDetailId === detailId) {
+        renderHostRequestDetail(detailId);
+      }
+    }
+
+    function bindListArchiveButtons() {
+      document.querySelectorAll(".list-archive-button").forEach((button) => {
+        button.onclick = (event) => {
+          event.stopPropagation();
+          archiveParticipantRequest(button.dataset.requestArchive);
+        };
+      });
+
+      document.querySelectorAll(".host-list-archive-button").forEach((button) => {
+        button.onclick = (event) => {
+          event.stopPropagation();
+          archiveHostRequest(button.dataset.hostRequestArchive);
+        };
+      });
+    }
+
+    function formatHostLogTimestamp() {
+      return "Jun 5, 2026 11:36 AM";
+    }
+
+    function formatSupplierSubmitTokenTimestamp() {
+      return "Sent Jun 5, 2026 11:36 AM";
+    }
+
+    function bindHostLineActions() {
+      document.querySelectorAll(".line-approve").forEach((button) => {
+        button.onclick = () => {
+          const row = button.closest("tr");
+          const current = Number(row.dataset.currentVolume || 0);
+          const requestedCell = row.querySelector(".requested-cell");
+          const requestedInput = requestedCell.querySelector("input");
+          const requested = requestedInput ? Number(requestedInput.value || 0) : Number(requestedCell.textContent.trim() || 0);
+          const delta = requested - current;
+          document.getElementById("host-action-status").textContent =
+            `Line item approved at requested volume ${requested}. This row would update live committed volume and write audit history for delta ${delta > 0 ? "+" : ""}${delta}.`;
+        };
+      });
+
+      document.querySelectorAll(".line-decline").forEach((button) => {
+        button.onclick = () => {
+          document.getElementById("host-action-status").textContent =
+            "Line item declined. This row would remain unchanged in live committed volume while the decision is recorded for this item.";
+        };
+      });
+
+      document.querySelectorAll(".line-revise").forEach((button) => {
+        button.onclick = () => {
+          const row = button.closest("tr");
+          const requestedCell = row.querySelector(".requested-cell");
+          const requestedFrequencyCell = row.querySelector(".requested-frequency-cell");
+          const deltaCell = row.querySelector(".delta-cell");
+          const current = Number(row.dataset.currentVolume || 0);
+          const requested = Number(requestedCell.textContent.trim() || 0);
+          const requestedFrequency = requestedFrequencyCell.textContent.trim();
+
+          row.dataset.originalRequested = String(requested);
+          row.dataset.originalRequestedFrequency = requestedFrequency;
+          row.dataset.originalDelta = deltaCell.textContent.trim();
+          row.dataset.originalDeltaClass = deltaCell.classList.contains("delta-neg") ? "delta-neg" : "delta-pos";
+
+          requestedFrequencyCell.innerHTML = `
+            <select class="requested-frequency-edit">
+              <option ${requestedFrequency === "Weekly" ? "selected" : ""}>Weekly</option>
+              <option ${requestedFrequency === "Monthly" ? "selected" : ""}>Monthly</option>
+            </select>
+          `;
+          requestedCell.innerHTML = `<input class="requested-input" type="number" min="0" step="1" value="${requested}" />`;
+          row.lastElementChild.innerHTML = editButtonsHtml();
+          const input = requestedCell.querySelector("input");
+          input.focus();
+          input.select();
+          input.addEventListener("input", () => {
+            const nextRequested = Number(input.value || 0);
+            const nextDelta = nextRequested - current;
+            deltaCell.textContent = `${nextDelta > 0 ? "+" : ""}${nextDelta}`;
+            deltaCell.classList.toggle("delta-pos", nextDelta >= 0);
+            deltaCell.classList.toggle("delta-neg", nextDelta < 0);
+          });
+          document.getElementById("host-action-status").textContent =
+            "Requested frequency and requested volume are now editable for this line item. Save when ready.";
+          bindHostEditModeActions();
+        };
+      });
+    }
+
+    function bindHostEditModeActions() {
+      document.querySelectorAll(".line-save-edit").forEach((button) => {
+        button.onclick = () => {
+          const row = button.closest("tr");
+          const detail = hostRequestDetails[activeHostRequestDetailId];
+          const rowIndex = Number(row.dataset.rowIndex);
+          const current = Number(row.dataset.currentVolume || 0);
+          const requestedCell = row.querySelector(".requested-cell");
+          const requestedFrequencyCell = row.querySelector(".requested-frequency-cell");
+          const rowData = detail.rows[rowIndex];
+          const editedRequested = Number(requestedCell.querySelector("input")?.value || 0);
+          const editedFrequency = requestedFrequencyCell.querySelector("select")?.value || rowData[3];
+          const editedDelta = editedRequested - current;
+
+          rowData[3] = editedFrequency;
+          rowData[5] = String(editedRequested);
+          rowData[6] = `${editedDelta > 0 ? "+" : ""}${editedDelta}`;
+          rowData[7] = editedDelta >= 0 ? "delta-pos" : "delta-neg";
+          detail.log.unshift(`${formatHostLogTimestamp()}|Host edited line item ${rowData[0]}: requested frequency set to ${editedFrequency}, requested volume set to ${editedRequested}.`);
+          renderHostRequestDetail(activeHostRequestDetailId);
+          document.getElementById("host-action-status").textContent =
+            `Line item updated and logged. Requested frequency is ${editedFrequency}, requested volume is ${editedRequested}, and delta recalculated to ${editedDelta > 0 ? "+" : ""}${editedDelta}.`;
+        };
+      });
+
+      document.querySelectorAll(".line-cancel-edit").forEach((button) => {
+        button.onclick = () => {
+          const row = button.closest("tr");
+          const requestedCell = row.querySelector(".requested-cell");
+          const requestedFrequencyCell = row.querySelector(".requested-frequency-cell");
+          const deltaCell = row.querySelector(".delta-cell");
+
+          requestedFrequencyCell.textContent = row.dataset.originalRequestedFrequency || requestedFrequencyCell.textContent;
+          requestedCell.textContent = row.dataset.originalRequested || requestedCell.textContent;
+          deltaCell.textContent = row.dataset.originalDelta || deltaCell.textContent;
+          deltaCell.classList.toggle("delta-pos", (row.dataset.originalDeltaClass || "delta-pos") === "delta-pos");
+          deltaCell.classList.toggle("delta-neg", (row.dataset.originalDeltaClass || "delta-pos") === "delta-neg");
+          row.lastElementChild.innerHTML = actionButtonsHtml();
+          document.getElementById("host-action-status").textContent =
+            "Line item edit cancelled. Requested frequency and requested volume reverted. Delta remains read-only.";
+          bindHostLineActions();
+        };
+      });
+    }
+
+    function applyView(view) {
+      activeView = view;
+      const config = viewConfig[view];
+
+      viewToggles.forEach((toggle) => {
+        toggle.classList.toggle("active", toggle.dataset.view === view);
+      });
+
+      roleOnlyBlocks.forEach((block) => {
+        block.classList.toggle("hidden-by-role", block.dataset.roleOnly !== view);
+      });
+
+      roleOnlyTabs.forEach((tab) => {
+        tab.classList.toggle("hidden-by-role", tab.dataset.roleOnlyTab !== view);
+      });
+
+      if (view === "participant" && document.querySelector('.tab.active')?.dataset.tab !== "requests") {
+        activateTab("requests");
+      }
+
+      if (view === "participant") {
+        activateInnerTab(activeInnerTab);
+      } else {
+        activateHostInnerTab(activeHostInnerTab);
+      }
+
+      document.getElementById("volumes-copy").textContent = config.volumesCopy;
+      document.getElementById("participants-title").textContent = config.participantsTitle;
+      document.getElementById("participants-copy").textContent = config.participantsCopy;
+      document.getElementById("participants-side-title").textContent = config.participantsSideTitle;
+      document.getElementById("participants-side-copy").textContent = config.participantsSideCopy;
+      document.getElementById("requests-title").textContent = config.requestsTitle;
+      document.getElementById("requests-copy").textContent = config.requestsCopy;
+    }
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => activateTab(tab.dataset.tab));
+    });
+
+    viewToggles.forEach((toggle) => {
+      toggle.addEventListener("click", () => applyView(toggle.dataset.view));
+    });
+
+    innerTabs.forEach((tab) => {
+      tab.addEventListener("click", () => activateInnerTab(tab.dataset.innerTab));
+    });
+
+    hostInnerTabs.forEach((tab) => {
+      tab.addEventListener("click", () => activateHostInnerTab(tab.dataset.hostInnerTab));
+    });
+
+    requestRows.forEach((row) => {
+      row.addEventListener("click", () => {
+        activateInnerTab("my-requests");
+        renderRequestDetail(row.dataset.requestDetail);
+      });
+    });
+
+    document.getElementById("cancel-participant-request").addEventListener("click", () => {
+      const detail = requestDetails[activeParticipantRequestDetailId];
+      if (!detail || detail.status !== "Pending") return;
+      detail.status = "Cancelled";
+      detail.statusClass = "declined";
+      detail.meta = detail.meta.map((item) => item.startsWith("Status:") ? "Status: Cancelled" : item);
+      detail.callout = "This request was cancelled by the participant.";
+      updateRequestListRowStatus(`[data-request-detail="${activeParticipantRequestDetailId}"]`, detail.status, detail.statusClass, activeParticipantRequestDetailId, false);
+      renderRequestDetail(activeParticipantRequestDetailId);
+    });
+
+    hostRequestRows.forEach((row) => {
+      row.addEventListener("click", () => {
+        activateHostInnerTab("host-requests");
+        renderHostRequestDetail(row.dataset.hostRequestDetail);
+      });
+    });
+
+    document.getElementById("participant-suppliers").addEventListener("change", () => {
+      renderChangeRequestTable("participant-form-table", participantFormRows, "participant-suppliers", "participant");
+    });
+
+    document.getElementById("participant-network").addEventListener("change", () => {
+      populateParticipantPrograms();
+    });
+
+    document.getElementById("participant-program").addEventListener("change", () => {
+      populateParticipantSuppliers();
+    });
+
+    document.getElementById("host-suppliers").addEventListener("change", () => {
+      renderChangeRequestTable("host-form-table", hostFormRows, "host-suppliers", "host-form");
+    });
+
+    document.getElementById("jump-to-request").addEventListener("click", () => {
+      activateTab("requests");
+      document.getElementById("buyer-form").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    document.getElementById("jump-to-add-buyer").addEventListener("click", () => {
+      activateTab("requests");
+      document.getElementById("add-buyer-form").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    document.getElementById("jump-to-review").addEventListener("click", () => {
+      activateTab("requests");
+      document.getElementById("host-request-card").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    document.getElementById("submit-request").addEventListener("click", () => {
+      document.getElementById("submit-status").textContent =
+        "Request submitted. Status is pending, the host buyer can now approve, decline, or request revision, and the live Volumes tab remains unchanged.";
+      activateInnerTab("my-requests");
+      renderRequestDetail("request-detail-1");
+    });
+
+    document.getElementById("simulate-add-buyer").addEventListener("click", () => {
+      document.getElementById("add-buyer-status").textContent =
+        "Approved Add New Buyer + Commitment request created. The buyer is added to Participants, the monthly commitment becomes live, and an audit row is written with old volume 0 and new volume 55.";
+    });
+
+    document.getElementById("send-to-supplier").addEventListener("click", () => {
+      const supplier = document.getElementById("supplier-approval-target").value;
+      const request = hostRequestDetails[activeHostRequestDetailId];
+      const logEntry = `Jun 5, 2026 10:32 AM|Pending request sent to ${supplier} for supplier approval. Event logged by host buyer.`;
+      request.log.unshift(logEntry);
+      const token = document.getElementById("supplier-submit-token");
+      token.textContent = `${formatSupplierSubmitTokenTimestamp()} • Message sent to ${supplier}`;
+      token.classList.add("visible");
+      document.getElementById("host-action-status").textContent =
+        `Pending request sent to ${supplier} for supplier approval and logged to request history.`;
+      renderHostRequestDetail(activeHostRequestDetailId);
+      document.getElementById("supplier-submit-token").textContent = `${formatSupplierSubmitTokenTimestamp()} • Message sent to ${supplier}`;
+      document.getElementById("supplier-submit-token").classList.add("visible");
+      document.getElementById("host-action-status").textContent =
+        `Pending request sent to ${supplier} for supplier approval and logged to request history.`;
+    });
+
+    document.getElementById("month-modal-close").addEventListener("click", closeMonthModal);
+    document.getElementById("month-modal-cancel").addEventListener("click", closeMonthModal);
+    document.getElementById("month-modal-save").addEventListener("click", saveMonthModal);
+    document.getElementById("month-modal").addEventListener("click", (event) => {
+      if (event.target.id === "month-modal") {
+        closeMonthModal();
+      }
+    });
+
+    applyView(activeView);
+    populateParticipantPrograms();
+    populateParticipantSuppliers();
+    renderChangeRequestTable("host-form-table", hostFormRows, "host-suppliers", "host-form");
+    renderRequestDetail("request-detail-1");
+    renderHostRequestDetail("host-request-detail-1");
+    bindHostLineActions();
+    bindListArchiveButtons();
+  </script>
+</body>
+</html>
